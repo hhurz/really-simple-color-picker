@@ -1,10 +1,13 @@
 /**
- *
- * Licensed under the MIT (MIT-LICENSE.txt) licenses.
+ * @preserve Really Simple Color Picker in jQuery
  *
  * Copyright (c) 2008-2012
  * Lakshan Perera (www.laktek.com) & Daniel Lacy (daniellacy.com)
+ * 
+ * Modified 2016
+ * hhurz, https://github.com/hhurz/really-simple-color-picker
  *
+ * Licensed under the MIT License, http://opensource.org/licenses/mit-license
  */
 
 (function ($) {
@@ -14,6 +17,7 @@
     var selectorOwner,
         activePalette,
         templates       = {
+            control : $('<div class="colorPicker-picker" tabindex="0" role="button">&nbsp;</div>'),
             palette : $('<div id="colorPicker_palette" class="colorPicker-palette" />'),
             swatch  : $('<div class="colorPicker-swatch">&nbsp;</div>'),
             hexLabel: $('<label for="colorPicker_hex">Hex</label>'),
@@ -29,6 +33,10 @@
 
         return this.each(function () {
             // Setup time. Clone new elements from our templates, set some IDs, make shortcuts, jazzercise.
+            var cItterate = 0;
+            while ($('#colorPicker_palette-' + cItterate).length > 0)
+              cItterate++;
+
             var element      = $(this),
                 opts         = $.extend({}, $.fn.colorPicker.defaults, options),
                 defaultColor = $.fn.colorPicker.toHex(
@@ -102,6 +110,12 @@
             newControl.bind("click", function () {
                 if( element.is( ':not(:disabled)' ) ) {
                                     $.fn.colorPicker.togglePalette($('#' + paletteId), $(this));
+                }
+            });
+            
+            newControl.bind("keydown", function (event) {
+                if (event.keyCode === 13) {
+                    newControl.trigger("click");
                 }
             });
 
